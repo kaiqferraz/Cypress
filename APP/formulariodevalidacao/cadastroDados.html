@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulário com Validação</title>
+    <link rel="stylesheet" href="styleDados.css">
+ 
+</head>
+<body>
+
+    <h1>Formulário com Validação</h1>
+
+    <form id="myForm">
+        <!-- Campo de Texto -->
+        <label for="nome">Nome:</label>
+        <input type="text" id="nome" name="nome" required>
+        <span class="error-message" id="errorNome"></span>
+
+        <!-- Campo de E-mail -->
+        <label for="email">E-mail:</label>
+        <input type="email" id="email" name="email" required>
+        <span class="error-message" id="errorEmail"></span>
+
+        <!-- Campo de Radio (Gênero) -->
+        <label>Gênero:</label>
+        <input type="radio" id="generoM" name="genero" value="masculino"> Masculino
+        <input type="radio" id="generoF" name="genero" value="feminino"> Feminino
+        <input type="radio" id="generoO" name="genero" value="outro"> Outro
+        <span class="error-message" id="errorGenero"></span>
+        <br>
+        <br>
+
+        <!-- Campo de Seleção -->
+        <label for="cidade">Cidade:</label>
+        <select id="cidade" name="cidade" required>
+            <option value="">Selecione</option>
+            <option value="sp">São Paulo</option>
+            <option value="rj">Rio de Janeiro</option>
+            <option value="bh">Belo Horizonte</option>
+        </select>
+        <span class="error-message" id="errorCidade"></span>
+
+        <!-- Caixa de Verificação -->
+        <label>Interesses:</label>
+         <br>
+         <label>Esporte <input type="checkbox" id="esporte" name="interesse" value="esporte"></label>
+         <label>viagem <input type="checkbox" id="viagem" name="interesse" value="viagem"></label>
+         <label>musica <input type="checkbox" id="musica" name="interesse" value="musica"></label>
+        <span class="error-message" id="errorInteresse"></span>
+
+        <!-- Botão de Envio -->
+        <input type="button" value="Enviar" id="enviarForm" onclick="validarFormulario()">
+    </form>
+
+    <div id="resultado"></div>
+
+    <script>
+        function validarFormulario() {
+            // Resetar mensagens de erro
+            document.getElementById('errorNome').innerHTML = '';
+            document.getElementById('errorEmail').innerHTML = '';
+            document.getElementById('errorCidade').innerHTML = '';
+            document.getElementById('errorInteresse').innerHTML = '';
+
+            // Obter valores dos campos
+            var nome = document.getElementById('nome').value;
+            var email = document.getElementById('email').value;
+            var cidade = document.getElementById('cidade').value;
+            var interesses = document.querySelectorAll('input[name="interesse"]:checked');
+
+            // Validar Nome
+            if (nome.trim() === '') {
+                document.getElementById('errorNome').innerHTML = 'Digite o nome';
+                return;
+            }
+
+            // Validar E-mail
+            var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                document.getElementById('errorEmail').innerHTML = 'E-mail inválido';
+                return;
+            }
+
+            // Validar Cidade
+            if (cidade === '') {
+                document.getElementById('errorCidade').innerHTML = 'Selecione a cidade';
+                return;
+            }
+
+            // Validar Interesses
+            if (interesses.length === 0) {
+                document.getElementById('errorInteresse').innerHTML = 'Selecione pelo menos um interesse';
+                return;
+            }
+
+            // Se todas as validações passarem, exibir os dados
+            exibirDados(nome, email, cidade, interesses);
+        }
+
+        function exibirDados(nome, email, cidade, interesses) {
+            var resultado = document.getElementById('resultado');
+            resultado.innerHTML = '<h2>Dados Enviados:</h2>';
+            resultado.innerHTML += '<p><strong>Nome:</strong> ' + nome + '</p>';
+            resultado.innerHTML += '<p><strong>E-mail:</strong> ' + email + '</p>';
+            resultado.innerHTML += '<p><strong>Cidade:</strong> ' + cidade + '</p>';
+            resultado.innerHTML += '<p><strong>Interesses:</strong> ' + Array.from(interesses).map(i => i.value).join(', ') + '</p>';
+        }
+    </script>
+
+</body>
+</html>
